@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CORS 확인</title>
+    <style>
+      body { max-width: 560px; margin: 64px auto; padding: 0 20px; font: 16px/1.5 system-ui, sans-serif; color: #172033; }
+      button { margin-top: 12px; padding: 10px 16px; border: 0; border-radius: 8px; color: white; background: #2563eb; cursor: pointer; }
+      pre { min-height: 80px; padding: 16px; border-radius: 8px; background: #f1f5f9; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>닉네임 중복 확인</h1>
+    <p>버튼을 누르면 브라우저에서 Spring API를 호출합니다.</p>
+    <button id="check">수현 닉네임 확인</button>
+    <pre id="result" aria-live="polite">응답 대기 중</pre>
+    <script>
+      document.querySelector("#check").addEventListener("click", async () => {
+        const result = document.querySelector("#result");
+        result.textContent = "요청 중...";
+        try {
+          const response = await fetch("http://localhost:8080/members/nickname/수현");
+          result.textContent = JSON.stringify(await response.json(), null, 2);
+        } catch (error) {
+          result.textContent = `${error.name}: ${error.message}. 브라우저 개발자 도구 Console을 확인하세요.`;
+        }
+      });
+    </script>
+  </body>
+</html>
