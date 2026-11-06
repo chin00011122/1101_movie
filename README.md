@@ -11,7 +11,7 @@ Spring Boot 3.5 / Java 21 프로젝트입니다. `member`, `rating` 테이블의
 
 ## API 명세
 
-요청과 응답의 필드별 명세는 [`docs/API_SPEC.md`](docs/API_SPEC.md)에 있습니다.
+요청과 응답의 필드별 명세는 [`docs/API_SPEC.md`](docs/API_SPEC.md)에 있습니다. 6주차에는 회원가입, 평점 등록·수정·삭제 API가 추가됩니다.
 
 | 기능 | Method / URL | 응답 |
 | --- | --- | --- |
