@@ -39,6 +39,6 @@ class GlobalExceptionHandlerTest {
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(response.getBody().code()).isEqualTo("RATING4091");
+        assertThat(response.getBody().code()).isEqualTo("RATING409_1");
     }
 }

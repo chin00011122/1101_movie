@@ -12,3 +12,8 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+
+# JWT settings must be root-level properties because JwtUtil reads jwt.*.
+jwt:
+  secret: ${JWT_SECRET}
+  access-expiration: ${JWT_ACCESS_EXPIRATION:3600}

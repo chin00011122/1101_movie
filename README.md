@@ -1,23 +1,26 @@
-# UMC 5주차 영화 평점 API
+# UMC 영화 평점 API (5~7주차)
 
-Spring Boot 3.5 / Java 21 프로젝트입니다. `member`, `rating` 테이블의 ORM 매핑과 세 개의 조회 API, 프론트엔드 CORS 연동을 구현합니다. `favorite`는 8주차를 위해 스키마만 준비합니다.
+Spring Boot 3.5 / Java 21 프로젝트입니다. 회원가입·로그인, JWT 인증, 내 정보 관리, 평점 조회와 토큰 기반 평점 CRUD를 구현합니다. `favorite`는 다음 주차를 위해 스키마만 준비합니다.
 
 ## 로컬 실행
 
 1. MySQL에서 `src/main/resources/db/schema.sql`을 실행합니다. 이 스크립트는 `umc_movie` 데이터베이스, 세 테이블, 테스트용 회원·평점 데이터를 만듭니다.
-2. 기본 설정은 MySQL 사용자 `root`를 사용합니다. `codex_writer`로 실행하려면 IntelliJ Run Configuration의 Environment variables에 `DB_USER=codex_writer`와 `DB_PASSWORD=본인_MySQL_비밀번호`를 설정합니다. `mysql_config_editor`의 login-path는 `mysql` 명령줄에서만 사용되므로 Spring JDBC에는 별도로 `DB_PASSWORD` 환경 변수가 필요합니다. 비밀번호를 코드나 설정 파일에 적지 마세요. 필요하면 `DB_URL`도 지정할 수 있습니다.
+2. IntelliJ의 `MovieApplication` Run Configuration에서 **Environment variables**를 설정합니다. DB 접속용 `DB_USER`, `DB_PASSWORD`, JWT용 `JWT_SECRET`, `JWT_ACCESS_EXPIRATION`이 필요합니다. 비밀번호와 JWT 비밀키를 코드나 설정 파일에 적거나 Git에 올리지 마세요. 필요하면 `DB_URL`도 지정할 수 있습니다.
 3. `MovieApplication`을 실행합니다. 앱은 `ddl-auto: validate`로 기존 스키마와 엔티티를 확인합니다.
 4. 기존 프론트 프로젝트 `D:/Dev/UMC/week2/front/umcine`를 `pnpm dev`로 실행합니다. Vite 출처는 `http://localhost:5173`이고, Spring CORS는 이 출처만 허용합니다.
 
 ## API 명세
 
-요청과 응답의 필드별 명세는 [`docs/API_SPEC.md`](docs/API_SPEC.md)에 있습니다. 6주차에는 회원가입, 평점 등록·수정·삭제 API가 추가됩니다.
+요청과 응답의 필드별 명세는 [`docs/API_SPEC.md`](docs/API_SPEC.md)에 있습니다. 로그인과 인증 이후 요청은 `Authorization: Bearer {token}` 헤더를 사용합니다.
 
 | 기능 | Method / URL | 응답 |
 | --- | --- | --- |
 | 닉네임 중복 확인 | `GET /members/nickname/{nickname}` | `{ "available": false }` |
 | 이메일 중복 확인 | `GET /members/email/{email}` | `{ "available": false }` |
 | 회원별 평점 조회 | `GET /members/{memberId}/ratings` | 평점 DTO 배열, 최신순 |
+| 로그인 | `POST /auth/login` | Access Token |
+| 내 정보 조회/수정 | `GET/PATCH /members/me` | 내 정보 DTO |
+| 평점 등록/수정/삭제 | `POST /ratings`, `PATCH/DELETE /ratings/{ratingId}` | 공통 응답 |
 
 회원 ID가 존재하지 않으면 평점 조회는 404를 반환합니다. TMDB의 영화 데이터는 저장하지 않고 `movieId`만 평점에 보관합니다.
 

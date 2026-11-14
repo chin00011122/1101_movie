@@ -23,12 +23,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.failure("COMMON4001", message));
     }
 
-    @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ApiResponse<Void>> handleApiException(ApiException exception) {
-        return ResponseEntity.status(exception.getStatus())
-                .body(ApiResponse.failure(exception.getCode(), exception.getMessage()));
-    }
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiResponse<Void>> handleDataIntegrity(DataIntegrityViolationException exception) {
         String detail = exception.getMostSpecificCause().getMessage();
@@ -41,7 +35,7 @@ public class GlobalExceptionHandler {
         }
 
         if (constraint.contains("uk_rating_member_movie")) {
-            return conflict("RATING4091", "이미 이 영화에 평점을 남기셨습니다.");
+            return conflict("RATING409_1", "이미 이 영화에 평점을 남기셨습니다.");
         }
         if (constraint.equals("email") || constraint.endsWith(".email") || constraint.endsWith("_email")) {
             return conflict("MEMBER4091", "이미 사용 중인 이메일입니다.");
@@ -69,4 +63,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiResponse.failure(code, message));
     }
+
+    // src/main/java/com/umc/movie/controller/GlobalExceptionHandler.java 에 아래 메서드를 추가합니다
+    // 우리가 직접 던진 예외입니다. 예외가 들고 온 상태 코드와 코드 문자열을 그대로 씁니다.
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiResponse<Void>> handleApiException(ApiException exception) {
+        return ResponseEntity.status(exception.getStatus())
+                .body(ApiResponse.failure(exception.getCode(), exception.getMessage()));
+    }
+
 }
